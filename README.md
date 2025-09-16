@@ -1,4 +1,4 @@
-The code for BuildGroup: a large-scale building instance segmentation model based on LiDAR data.
+The code for BuildGroup: a large-scale building instance segmentation model based on LiDAR data. It is not complete. I will update it as soon as possible.
 
 # Data preprocessing 🔨
 
