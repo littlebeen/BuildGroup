@@ -1,0 +1,86 @@
+model:
+  channels: 16
+  num_blocks: 7
+  semantic_classes: 7
+  #semantic_classes: 2
+  instance_classes: 1
+  sem2ins_classes: []
+  semantic_only: False
+  semantic_weight: [1., 1., 1., 1., 1., 1., 1.]
+ #semantic_weight: [1.0,1.0]
+  ignore_label: -100
+  with_coords: False
+  grouping_cfg:
+    with_pyramid: True
+    pyramid_base_size: 0.3333
+    with_octree: True
+    score_thr: 0.2
+    radius: 0.9
+    mean_active: 3
+    class_numpoint_mean: [-1.,-1.,-1., -1., -1.,-1., 100]
+    #class_numpoint_mean: [-1., 100.]
+    npoint_thr: 0.01  # absolute if class_numpoint == -1, relative if class_numpoint != -1
+    ignore_classes: [0]
+  instance_voxel_cfg:
+    scale: 3
+    spatial_shape: 20
+  train_cfg:
+    lvl_fusion: True
+    max_proposal_num: 300
+    pos_iou_thr: 0.5
+    match_low_quality: True
+    min_pos_thr: 0.1
+  test_cfg:
+    x4_split: False
+    cls_score_thr: 0.001
+    mask_score_thr: -0.5
+    min_npoint: 10
+    eval_tasks: ['instance','semantic']
+    #eval_tasks: ['instance']
+  fixed_modules: []
+
+data:
+  train:
+    type: 'urbanbis'
+    data_root: '/root/autodl-tmp/Urbanbis/reconstructed/Wuhu_softgroup'
+    prefix: 'train'
+    suffix: '_inst_nostuff.pth'
+    training: True
+    repeat: 4
+    voxel_cfg:
+      scale: 3
+      spatial_shape: [128, 512]
+      max_npoint: 250000
+      min_npoint: 5000
+  test:
+    type: 'urbanbis'
+    data_root: '/root/autodl-tmp/Urbanbis/reconstructed/Wuhu_softgroup'
+    prefix: 'val_250m'
+    suffix: '_inst_nostuff.pth'
+    training: False
+    voxel_cfg:
+      scale: 3
+      spatial_shape: [128, 512]
+      max_npoint: 250000
+      min_npoint: 5000
+
+dataloader:
+  train:
+    batch_size: 4
+    num_workers: 2
+  test:
+    batch_size: 1
+    num_workers: 1
+
+optimizer:
+  type: 'Adam'
+  lr: 0.004
+
+eval_min_npoint: 10
+
+fp16: False
+epochs: 108
+step_epoch: 20
+save_freq: 4
+pretrain: ''
+work_dir: './work_dirs'
